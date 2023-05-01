@@ -1,5 +1,4 @@
-///////// NEW STUFF ADDED USE STATE
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import * as tf from '@tensorflow/tfjs';
 import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
@@ -13,7 +12,7 @@ export default function Main() {
   const canvasRef = useRef(null);
   const model = handPoseDetection.SupportedModels.MediaPipeHands;
   const detectorConfig = {
-    runtime: 'tfjs', // or 'tfjs'
+    runtime: 'tfjs',
     modelType: 'lite',
   };
 
@@ -23,7 +22,6 @@ export default function Main() {
       detectorConfig
     );
 
-    //  Loop and detect hands
     setInterval(() => {
       detect(detector);
     }, 100);
@@ -34,22 +32,18 @@ export default function Main() {
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current.video.readyState === 4
     ) {
-      // Get Video Properties
       const video = webcamRef.current.video;
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
 
-      // Set video width
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
-      // Set canvas height and width
       canvasRef.current.width = videoWidth;
       canvasRef.current.height = videoHeight;
 
       const hands = await detector.estimateHands(video);
 
-      // Draw mesh
       const ctx = canvasRef.current.getContext('2d');
       drawHand(hands, ctx);
     }
